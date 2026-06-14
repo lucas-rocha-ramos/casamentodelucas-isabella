@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Lista de Presentes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #fefaf5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #2c2a27;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 20px 48px;
+        }
+
+        .hero-banner {
+            width: 100%;
+            height: 220px;
+            background-image: url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format');
+            background-size: cover;
+            background-position: center 30%;
+            border-radius: 0 0 32px 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+
+        .profile-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: -58px;
+            margin-bottom: 16px;
+        }
+
+        .profile-pic {
+            width: 112px;
+            height: 112px;
+            background-color: #e9e1d5;
+            border-radius: 100%;
+            border: 4px solid white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            background-size: cover;
+            background-position: center;
+            transition: all 0.2s;
+        }
+
+        .event-name {
+            text-align: center;
+            font-size: 1.9rem;
+            font-weight: 590;
+            letter-spacing: -0.02em;
+            color: #2f3e2e;
+            margin-top: 8px;
+        }
+
+        .event-date {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #5d6e53;
+            margin-top: 6px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .buttons-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin: 40px 0 36px;
+        }
+
+        .btn-primary {
+            background-color: #4a6442;
+            border: none;
+            border-radius: 60px;
+            padding: 18px 20px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.25s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5533;
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: #e2e6dc;
+            color: #2f442a;
+            box-shadow: inset 0 0 0 1px #cbdcc1;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d4dbc9;
+        }
+
+        .footer-local {
+            margin-top: 48px;
+            border-top: 1px solid #e0e2d8;
+            padding-top: 32px;
+            text-align: center;
+        }
+
+        .local-title {
+            font-weight: 540;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            color: #6a7662;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .event-address {
+            font-size: 1.05rem;
+            color: #2c3e2a;
+            font-weight: 470;
+            margin-bottom: 16px;
+            background: #f3f4ef;
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 40px;
+        }
+
+        .map-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 8px;
+        }
+
+        .map-link {
+            background: transparent;
+            border: 1px solid #cbd7be;
+            padding: 10px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: #3d5938;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .map-link:hover {
+            background-color: #edf3e7;
+            border-color: #9bb589;
+        }
+
+        .admin-lock {
+            text-align: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            font-size: 0.75rem;
+            color: #b2bba8;
+            border-top: 1px dashed #e2e6da;
+            cursor: pointer;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .lock-icon {
+            font-size: 1rem;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-card {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 32px;
+            padding: 28px 24px;
+            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-card h3 {
+            font-weight: 590;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: #3a5533;
+        }
+
+        .modal-card label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #4c5c43;
+            margin-top: 14px;
+            display: block;
+        }
+
+        .modal-card input, .modal-card textarea {
+            width: 100%;
+            padding: 12px 14px;
+            margin-top: 6px;
+            border-radius: 16px;
+            border: 1px solid #cfddc4;
+            background: #fefcf7;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        .save-btn {
+            background: #4a6442;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 60px;
+            width: 100%;
+            margin-top: 24px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .close-modal {
+            text-align: right;
+            font-size: 1.8rem;
+            cursor: pointer;
+            margin-bottom: 8px;
+            color: #7c8b72;
+        }
+
+        .error-pass {
+            color: #c06c54;
+            font-size: 0.75rem;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .password-input-group {
+            position: relative;
+        }
+
+        hr {
+            margin: 10px 0;
+            border-color: #e2e6da;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #4a6442;
+        }
+
+        @media (max-width: 550px) {
+            .hero-banner { height: 170px; }
+            .profile-pic { width: 92px; height: 92px; }
+            .event-name { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero-banner" id="bannerImage"></div>
+
+    <div class="profile-wrapper">
+        <div class="profile-pic" id="profilePic"></div>
+    </div>
+
+    <h1 class="event-name" id="eventName">Carregando...</h1>
+    
+    <div class="event-date" id="eventDateBlock">
+        <span class="date-icon">📅</span> 
+        <span id="eventDateText">Carregando...</span>
+    </div>
+
+    <div class="buttons-grid">
+        <a href="#" id="btnLink1" class="btn-primary" target="_blank" rel="noopener noreferrer">
+            <i>✨</i> Presentes MAGALU
+        </a>
+        <a href="#" id="btnLink2" class="btn-primary btn-secondary" target="_blank" rel="noopener noreferrer">
+            <i>🎁</i> Presentes HAVAN
+        </a>
+    </div>
+
+    <div class="footer-local">
+        <div class="local-title">📍 LOCAL DA CELEBRAÇÃO</div>
+        <div class="event-address" id="addressText">Carregando...</div>
+        <div class="map-buttons">
+            <a href="#" id="googleMapsLink" class="map-link" target="_blank">🗺️ Google Maps</a>
+            <a href="#" id="wazeLink" class="map-link" target="_blank">🧭 Waze</a>
+        </div>
+    </div>
+
+    <div class="admin-lock" id="adminLockBtn">
+        <span class="lock-icon">🔒</span> admin · alterar dados
+    </div>
+</div>
+
+<div id="adminModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="close-modal" id="closeModalBtn">&times;</div>
+        <h3>🔐 Acesso restrito</h3>
+        
+        <div class="password-input-group">
+            <label>Senha de administrador</label>
+            <input type="password" id="adminPassword" placeholder="Digite a senha" autocomplete="off">
+        </div>
+        
+        <div id="passErrorMsg" class="error-pass"></div>
+
+        <div id="editFieldsArea" style="display: none;">
+            <hr>
+            <label>Nome do evento (casal)</label>
+            <input type="text" id="editEventName" placeholder="Nome do evento">
+            
+            <label>Data do evento</label>
+            <input type="text" id="editEventDate" placeholder="Data do evento">
+            
+            <label>URL do banner (capa)</label>
+            <input type="text" id="editBannerUrl" placeholder="URL da imagem de capa">
+            
+            <label>URL da foto de perfil</label>
+            <input type="text" id="editProfilePicUrl" placeholder="URL da foto de perfil">
+            
+            <label>Link 1 (Final Feliz)</label>
+            <input type="text" id="editLink1" placeholder="Link da lista 1">
+            
+            <label>Link 2 (Lista Havan)</label>
+            <input type="text" id="editLink2" placeholder="Link da lista 2">
+            
+            <label>Endereço do evento</label>
+            <input type="text" id="editAddress" placeholder="Endereço completo">
+            
+            <label>Google Maps URL</label>
+            <input type="text" id="editGoogleMaps" placeholder="Link do Google Maps">
+            
+            <label>Waze URL</label>
+            <input type="text" id="editWaze" placeholder="Link do Waze">
+            
+            <button class="save-btn" id="saveAdminChanges">💾 Salvar alterações</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // URL do Google Apps Script (Web App)
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwUtl-vIrsNSqx6qE3im_qLBxvQlRmGzzq-oD_koS3cuudR7jtzxhDwO3CmlMZV-tDM/exec";
+
+    let config = {
+        eventName: "",
+        eventDate: "",
+        bannerUrl: "",
+        profilePicUrl: "",
+        link1: "",
+        link2: "",
+        address: "",
+        googleMaps: "",
+        waze: ""
+    };
+
+    // Buscar configurações do Google Sheets
+    async function fetchConfigFromSheet() {
+        try {
+            const response = await fetch(`${WEBAPP_URL}?action=getConfig`);
+            const result = await response.json();
+            
+            if (result.success && result.data) {
+                config = { ...config, ...result.data };
+                applyConfigToUI();
+                // Salvar localmente como cache
+                localStorage.setItem("presenteListConfig", JSON.stringify(config));
+            } else {
+                // Tentar carregar do cache local
+                loadStoredConfig();
+            }
+        } catch (error) {
+            console.error("Erro ao buscar configurações:", error);
+            loadStoredConfig();
+        }
+    }
+
+    // Carregar dados do localStorage (fallback)
+    function loadStoredConfig() {
+        const saved = localStorage.getItem("presenteListConfig");
+        if(saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                config = { ...config, ...parsed };
+                applyConfigToUI();
+            } catch(e) {}
+        }
+    }
+
+    function applyConfigToUI() {
+        document.getElementById("eventName").innerText = config.eventName || "Meu Evento";
+        document.getElementById("eventDateText").innerText = config.eventDate || "Data a definir";
+        
+        const bannerDiv = document.getElementById("bannerImage");
+        if(config.bannerUrl) {
+            bannerDiv.style.backgroundImage = `url('${config.bannerUrl}')`;
+        }
+        
+        const profileDiv = document.querySelector(".profile-pic");
+        if(config.profilePicUrl) {
+            profileDiv.style.backgroundImage = `url('${config.profilePicUrl}')`;
+        }
+        
+        document.getElementById("btnLink1").href = config.link1 || "#";
+        document.getElementById("btnLink2").href = config.link2 || "#";
+        document.getElementById("addressText").innerText = config.address || "Endereço não informado";
+        document.getElementById("googleMapsLink").href = config.googleMaps || "#";
+        document.getElementById("wazeLink").href = config.waze || "#";
+    }
+
+    // Salvar configurações no Google Sheets
+    async function saveConfigToSheet(updatedConfig, senha) {
+        try {
+            const response = await fetch(WEBAPP_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    action: "saveConfig",
+                    senha: senha,
+                    ...updatedConfig
+                })
+            });
+            
+            return { success: true };
+        } catch (error) {
+            console.error("Erro ao salvar:", error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Registrar visita no Google Sheets
+    async function registrarVisita() {
+        try {
+            await fetch(WEBAPP_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    action: "registrarVisita",
+                    pagina: "landingpage",
+                    userAgent: navigator.userAgent
+                })
+            });
+        } catch(e) {
+            console.log("Erro ao registrar visita:", e);
+        }
+    }
+
+    // Registrar clique em presente
+    async function registrarClique(tipo, link) {
+        try {
+            await fetch(WEBAPP_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    action: "registrarPresente",
+                    tipo: tipo,
+                    link: link,
+                    userAgent: navigator.userAgent
+                })
+            });
+        } catch(e) {
+            console.log("Erro ao registrar clique:", e);
+        }
+    }
+
+    // Adicionar eventos de clique nos botões
+    document.getElementById("btnLink1").addEventListener("click", () => {
+        registrarClique("final_feliz", config.link1);
+    });
+
+    document.getElementById("btnLink2").addEventListener("click", () => {
+        registrarClique("havan", config.link2);
+    });
+
+    // Modal Admin
+    const modal = document.getElementById("adminModal");
+    const lockBtn = document.getElementById("adminLockBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const adminPassword = document.getElementById("adminPassword");
+    const passErrorMsg = document.getElementById("passErrorMsg");
+    const editFieldsArea = document.getElementById("editFieldsArea");
+
+    let isAuthenticated = false;
+
+    function closeModal() {
+        modal.classList.remove("active");
+        adminPassword.value = "";
+        passErrorMsg.innerText = "";
+        editFieldsArea.style.display = "none";
+        isAuthenticated = false;
+    }
+
+    lockBtn.addEventListener("click", () => {
+        modal.classList.add("active");
+        adminPassword.value = "";
+        passErrorMsg.innerText = "";
+        editFieldsArea.style.display = "none";
+        isAuthenticated = false;
+        adminPassword.focus();
+    });
+
+    closeModalBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+        if(e.target === modal) closeModal();
+    });
+
+    function validateAndShowFields() {
+        const password = adminPassword.value.trim();
+        const SENHA_CORRETA = "041226";
+        
+        if(password !== SENHA_CORRETA) {
+            passErrorMsg.innerText = "❌ Senha incorreta. Use 041226 para editar.";
+            editFieldsArea.style.display = "none";
+            isAuthenticated = false;
+            return false;
+        }
+        
+        passErrorMsg.innerText = "";
+        isAuthenticated = true;
+        editFieldsArea.style.display = "block";
+        
+        document.getElementById("editEventName").value = config.eventName || "";
+        document.getElementById("editEventDate").value = config.eventDate || "";
+        document.getElementById("editBannerUrl").value = config.bannerUrl || "";
+        document.getElementById("editProfilePicUrl").value = config.profilePicUrl || "";
+        document.getElementById("editLink1").value = config.link1 || "";
+        document.getElementById("editLink2").value = config.link2 || "";
+        document.getElementById("editAddress").value = config.address || "";
+        document.getElementById("editGoogleMaps").value = config.googleMaps || "";
+        document.getElementById("editWaze").value = config.waze || "";
+        
+        return true;
+    }
+
+    adminPassword.addEventListener("keypress", (e) => {
+        if(e.key === "Enter") {
+            e.preventDefault();
+            validateAndShowFields();
+        }
+    });
+
+    const saveAdminBtn = document.getElementById("saveAdminChanges");
+    saveAdminBtn.addEventListener("click", async () => {
+        if(!isAuthenticated) {
+            const authenticated = validateAndShowFields();
+            if(!authenticated) return;
+        }
+        
+        const senha = adminPassword.value.trim();
+        
+        const updatedConfig = {
+            eventName: document.getElementById("editEventName").value.trim(),
+            eventDate: document.getElementById("editEventDate").value.trim(),
+            bannerUrl: document.getElementById("editBannerUrl").value.trim(),
+            profilePicUrl: document.getElementById("editProfilePicUrl").value.trim(),
+            link1: document.getElementById("editLink1").value.trim(),
+            link2: document.getElementById("editLink2").value.trim(),
+            address: document.getElementById("editAddress").value.trim(),
+            googleMaps: document.getElementById("editGoogleMaps").value.trim(),
+            waze: document.getElementById("editWaze").value.trim()
+        };
+        
+        // Salvar no Google Sheets
+        const result = await saveConfigToSheet(updatedConfig, senha);
+        
+        if (result.success) {
+            // Atualizar configuração local
+            config = { ...config, ...updatedConfig };
+            localStorage.setItem("presenteListConfig", JSON.stringify(config));
+            applyConfigToUI();
+            
+            const toast = document.createElement("div");
+            toast.innerText = "✓ Dados salvos na planilha com sucesso!";
+            toast.style.position = "fixed";
+            toast.style.bottom = "30px";
+            toast.style.left = "50%";
+            toast.style.transform = "translateX(-50%)";
+            toast.style.backgroundColor = "#4a6442";
+            toast.style.color = "white";
+            toast.style.padding = "12px 24px";
+            toast.style.borderRadius = "60px";
+            toast.style.fontSize = "0.9rem";
+            toast.style.zIndex = "1001";
+            toast.style.fontWeight = "500";
+            toast.style.boxShadow = "0 4px 12px rgba(0,0,0,0.15)";
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+            
+            closeModal();
+        } else {
+            passErrorMsg.innerText = "❌ Erro ao salvar na planilha. Tente novamente.";
+        }
+    });
+
+    // Inicializar
+    fetchConfigFromSheet();
+    registrarVisita();
+</script>
+</body>
+</html>
