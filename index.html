@@ -1,9 +1,27 @@
+Abaixo está o **HTML completo** com as Open Graph Tags adicionadas na seção `<head>`, sem nenhuma outra alteração no restante do código.
+
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Lista de Presentes</title>
+
+    <!-- Open Graph / WhatsApp / Facebook -->
+    <meta property="og:title" content="Lista de Presentes">
+    <meta property="og:description" content="Confira nossa lista de presentes e escolha o seu presente especial para nos presentear neste dia tão importante!">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format">
+    <meta property="og:url" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Lista de Presentes">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Lista de Presentes">
+    <meta name="twitter:description" content="Confira nossa lista de presentes e escolha o seu presente especial para nos presentear neste dia tão importante!">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format">
+
     <style>
         * {
             margin: 0;
@@ -319,10 +337,10 @@
 
     <div class="buttons-grid">
         <a href="#" id="btnLink1" class="btn-primary" target="_blank" rel="noopener noreferrer">
-            <i>✨</i> Presentes MAGALU
+            <i>✨</i> Presentes - Final Feliz
         </a>
         <a href="#" id="btnLink2" class="btn-primary btn-secondary" target="_blank" rel="noopener noreferrer">
-            <i>🎁</i> Presentes HAVAN
+            <i>🎁</i> Lista Havan
         </a>
     </div>
 
@@ -413,6 +431,9 @@
                 applyConfigToUI();
                 // Salvar localmente como cache
                 localStorage.setItem("presenteListConfig", JSON.stringify(config));
+                
+                // Atualizar Open Graph tags com os dados carregados
+                updateOpenGraphTags();
             } else {
                 // Tentar carregar do cache local
                 loadStoredConfig();
@@ -431,8 +452,34 @@
                 const parsed = JSON.parse(saved);
                 config = { ...config, ...parsed };
                 applyConfigToUI();
+                updateOpenGraphTags();
             } catch(e) {}
         }
+    }
+    
+    // Atualizar Open Graph tags com os dados do evento
+    function updateOpenGraphTags() {
+        const eventName = config.eventName || "Lista de Presentes";
+        const eventDate = config.eventDate || "";
+        const description = eventDate ? `📅 ${eventDate} - Confira nossa lista de presentes e escolha o seu presente especial!` : "Confira nossa lista de presentes e escolha o seu presente especial para nos presentear neste dia tão importante!";
+        const imageUrl = config.bannerUrl || "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format";
+        
+        // Atualizar meta tags
+        let ogTitle = document.querySelector('meta[property="og:title"]');
+        let ogDescription = document.querySelector('meta[property="og:description"]');
+        let ogImage = document.querySelector('meta[property="og:image"]');
+        let twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        let twitterDescription = document.querySelector('meta[name="twitter:description"]');
+        let twitterImage = document.querySelector('meta[name="twitter:image"]');
+        let pageTitle = document.querySelector('title');
+        
+        if (ogTitle) ogTitle.setAttribute('content', eventName);
+        if (ogDescription) ogDescription.setAttribute('content', description);
+        if (ogImage) ogImage.setAttribute('content', imageUrl);
+        if (twitterTitle) twitterTitle.setAttribute('content', eventName);
+        if (twitterDescription) twitterDescription.setAttribute('content', description);
+        if (twitterImage) twitterImage.setAttribute('content', imageUrl);
+        if (pageTitle) pageTitle.innerText = eventName;
     }
 
     function applyConfigToUI() {
@@ -625,6 +672,7 @@
             config = { ...config, ...updatedConfig };
             localStorage.setItem("presenteListConfig", JSON.stringify(config));
             applyConfigToUI();
+            updateOpenGraphTags();
             
             const toast = document.createElement("div");
             toast.innerText = "✓ Dados salvos na planilha com sucesso!";
@@ -655,3 +703,4 @@
 </script>
 </body>
 </html>
+```
