@@ -1,4 +1,4 @@
-Abaixo está o **HTML completo** com as Open Graph Tags adicionadas na seção `<head>`, sem nenhuma outra alteração no restante do código.
+Abaixo está o **HTML completo** com as correções: título alterado para "Lista de Presentes de Lucas e Isabella" e ajustes nas Open Graph Tags para garantir que a imagem apareça corretamente no WhatsApp.
 
 ```html
 <!DOCTYPE html>
@@ -6,19 +6,21 @@ Abaixo está o **HTML completo** com as Open Graph Tags adicionadas na seção `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Lista de Presentes</title>
+    <title>Lista de Presentes de Lucas e Isabella</title>
 
     <!-- Open Graph / WhatsApp / Facebook -->
-    <meta property="og:title" content="Lista de Presentes">
+    <meta property="og:title" content="Lista de Presentes de Lucas e Isabella">
     <meta property="og:description" content="Confira nossa lista de presentes e escolha o seu presente especial para nos presentear neste dia tão importante!">
     <meta property="og:image" content="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format">
-    <meta property="og:url" content="">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://www.casamentodelucaseisabella.uk">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Lista de Presentes">
+    <meta property="og:site_name" content="Lista de Presentes de Lucas e Isabella">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Lista de Presentes">
+    <meta name="twitter:title" content="Lista de Presentes de Lucas e Isabella">
     <meta name="twitter:description" content="Confira nossa lista de presentes e escolha o seu presente especial para nos presentear neste dia tão importante!">
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format">
 
@@ -459,7 +461,7 @@ Abaixo está o **HTML completo** com as Open Graph Tags adicionadas na seção `
     
     // Atualizar Open Graph tags com os dados do evento
     function updateOpenGraphTags() {
-        const eventName = config.eventName || "Lista de Presentes";
+        const eventName = config.eventName || "Lista de Presentes de Lucas e Isabella";
         const eventDate = config.eventDate || "";
         const description = eventDate ? `📅 ${eventDate} - Confira nossa lista de presentes e escolha o seu presente especial!` : "Confira nossa lista de presentes e escolha o seu presente especial para nos presentear neste dia tão importante!";
         const imageUrl = config.bannerUrl || "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2070&auto=format";
@@ -483,7 +485,7 @@ Abaixo está o **HTML completo** com as Open Graph Tags adicionadas na seção `
     }
 
     function applyConfigToUI() {
-        document.getElementById("eventName").innerText = config.eventName || "Meu Evento";
+        document.getElementById("eventName").innerText = config.eventName || "Lista de Presentes de Lucas e Isabella";
         document.getElementById("eventDateText").innerText = config.eventDate || "Data a definir";
         
         const bannerDiv = document.getElementById("bannerImage");
